@@ -250,7 +250,7 @@ static void shoot_feedback_update(shoot_control_t *shoot_control_update)
 
     //从裁判系统中设置射速上限
    // shoot_control_update->shoot_limit = (fp32)(robot_state.shooter_id1_17mm_speed_limit);
-		shoot_control_update->shoot_limit = 18;
+		shoot_control_update->shoot_limit = 30;
     shoot_control_update->shoot_speed_set = shoot_control.shoot_limit;
     if (shoot_control_update->shoot_mode == SHOOT_STOP)
     {

@@ -24,9 +24,9 @@
 //选择底盘状态 开关通道号
 #define CHASSIS_MODE_CHANNEL 0
 //遥控器前进摇杆（max 660）转化成车体前进速度（m/s）的比例
-#define CHASSIS_VX_RC_SEN 0.006f    //0.006f
+#define CHASSIS_VX_RC_SEN 0.003f    //0.006f
 //遥控器左右摇杆（max 660）转化成车体左右速度（m/s）的比例
-#define CHASSIS_VY_RC_SEN 0.005f    //0.005f
+#define CHASSIS_VY_RC_SEN 0.0025f    //0.005f
 //遥控器旋转摇杆（max 660）转化成车体旋转速度（rad/s）的比例
 #define CHASSIS_WZ_RC_SEN 0.006f    //0.006f
 //底盘跟随云台模式下，食指拨轮控制底盘扭腰的动作幅度，凭感觉调吧
@@ -85,9 +85,9 @@
 //底盘运动过程平稳平移速度（只按方向键）
 #define NORMAL_MAX_CHASSIS_SPEED_Y 2.0f
 //底盘运动过程最大前进速度（按住SHIFT）
-#define DASH_MAX_CHASSIS_SPEED_X   3.9f
+#define DASH_MAX_CHASSIS_SPEED_X   3.9f  // 3.9
 //底盘运动过程最大平移速度（按住SHIFT）
-#define DASH_MAX_CHASSIS_SPEED_Y   3.9f
+#define DASH_MAX_CHASSIS_SPEED_Y   3.9f   //3.9
 
 #define CHASSIS_WZ_SET_SCALE -0.00625f       //0.1f
 

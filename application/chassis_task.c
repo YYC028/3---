@@ -219,8 +219,8 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         else
         {
             chassis_move_control->is_whipping = 0;
-           chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;   //为了方便展示小陀螺，现在是遥感拨到上方直接开转，正常要用下面的这行（底盘跟随云台
-					//chassis_move_control->wz_set = -PID_calc_swing_wz(&chassis_move_control->chassis_angle_pid, chassis_move_control->chassis_yaw_motor->relative_angle, chassis_move_control->chassis_relative_angle_set);//底盘跟随云台,
+          // chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;   //为了方便展示小陀螺，现在是遥感拨到上方直接开转，正常要用下面的这行（底盘跟随云台
+					chassis_move_control->wz_set = -PID_calc_swing_wz(&chassis_move_control->chassis_angle_pid, chassis_move_control->chassis_yaw_motor->relative_angle, chassis_move_control->chassis_relative_angle_set);//底盘跟随云台,
         }
 
         //速度限幅
@@ -234,7 +234,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         chassis_move_control->chassis_yaw_set = rad_format(angle_set);
         delat_angle = rad_format(chassis_move_control->chassis_yaw_set - chassis_move_control->chassis_yaw);
         //计算旋转的角速度
-        chassis_move_control->wz_set = PID_calc(&chassis_move_control->chassis_angle_pid, 0.0f, delat_angle);
+        chassis_move_control->wz_set = -PID_calc(&chassis_move_control->chassis_angle_pid, delat_angle, 0);
         //速度限幅
         chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
         chassis_move_control->vy_set = fp32_constrain(vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);

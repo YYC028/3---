@@ -94,10 +94,10 @@ static void gimbal_init(gimbal_control_t *init)
     PID_init(&init->gimbal_pitch_motor.gimbal_motor_gyro_pid, PID_POSITION, Pitch_speed_pid, PITCH_SPEED_PID_MAX_OUT, PITCH_SPEED_PID_MAX_IOUT);
 	//初始化电机零偏编码值offset
 	init->gimbal_yaw_motor.offset_ecd = 5740;
-	init->gimbal_pitch_motor.offset_ecd = 7604;
-    //初始化pitch最大最小机械角度，防止电机过热
-	init->gimbal_pitch_motor.max_relative_angle = 0.57;
-	init->gimbal_pitch_motor.min_relative_angle = -0.53; 
+	init->gimbal_pitch_motor.offset_ecd = 7623;
+    //初始化pitch最大最小机械角度，防止电机期望角度超过死角产生抖动或过热
+	init->gimbal_pitch_motor.max_relative_angle = 0.11; 
+	init->gimbal_pitch_motor.min_relative_angle = -0.50; 
 			
 			
     gimbal_feedback_update(init);
@@ -156,6 +156,7 @@ static void gimbal_set_mode(gimbal_control_t *gimbal_mode_set)
     if (switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
     {
          gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW;  //不走pid
+			   gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW; 
     }
 
     //其实拨杆在上面或中间都是陀螺仪控制而不是用编码值，所以其实可以合并
@@ -215,7 +216,7 @@ static void gimbal_set_control(gimbal_control_t *gimbal_control_set)
     if (gimbal_control_set->gimbal_yaw_motor.gimbal_motor_mode == GIMBAL_MOTOR_RAW)
     {
         //raw模式下，直接发送控制值
-        gimbal_control_set->gimbal_yaw_motor.raw_cmd_current = add_yaw_angle;
+        gimbal_control_set->gimbal_yaw_motor.raw_cmd_current = add_yaw_angle*1000000;
     }
     else if (gimbal_control_set->gimbal_yaw_motor.gimbal_motor_mode == GIMBAL_MOTOR_GYRO)
     {
@@ -228,7 +229,7 @@ static void gimbal_set_control(gimbal_control_t *gimbal_control_set)
     if (gimbal_control_set->gimbal_pitch_motor.gimbal_motor_mode == GIMBAL_MOTOR_RAW)
     {
         //raw模式下，直接发送控制值
-        gimbal_control_set->gimbal_pitch_motor.raw_cmd_current = add_pitch_angle;
+        gimbal_control_set->gimbal_pitch_motor.raw_cmd_current = add_pitch_angle*1000000;
     }
     else if (gimbal_control_set->gimbal_pitch_motor.gimbal_motor_mode == GIMBAL_MOTOR_GYRO)
     {
