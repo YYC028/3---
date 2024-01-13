@@ -26,7 +26,7 @@ void chassis_task(void const *pvParameters)
 	
 		        //ø’œ–“ª∂Œ ±º‰
     vTaskDelay(CHASSIS_TASK_INIT_TIME);
-     chassis_init(&chassis_move);
+    chassis_init(&chassis_move);
 
 	
     while(1)

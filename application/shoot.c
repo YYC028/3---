@@ -291,7 +291,7 @@ static void shoot_set_mode(shoot_control_t *shoot_ctrl)
     }
 
     //当处于摩擦轮提速阶段，摩擦轮速度提到期望值，进入预供弹阶段
-    if ((shoot_ctrl->shoot_mode == SHOOT_READY_FRIC) && (my_abs(shoot_ctrl->fric_motor[0].speed) >= my_abs(shoot_ctrl->shoot_speed_limit - 1.0f)) && (my_abs(shoot_ctrl->fric_motor[1].speed) >= my_abs(shoot_ctrl->shoot_speed_limit - 1.0f)))
+    if ((shoot_ctrl->shoot_mode == SHOOT_READY_FRIC) && (my_abs(shoot_ctrl->fric_motor[0].speed) >= my_abs(shoot_ctrl->shoot_speed_limit - 50.0f)) && (my_abs(shoot_ctrl->fric_motor[1].speed) >= my_abs(shoot_ctrl->shoot_speed_limit - 50.0f)))
     {
         //shoot_ctrl->shoot_mode = SHOOT_READY_BULLET;    //预供弹阶段
         shoot_ctrl->shoot_mode = SHOOT_READY;             //直接进入预备射击阶段，取消预供弹阶段    

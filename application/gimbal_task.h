@@ -10,9 +10,9 @@
 #define UART_PRINT_GIMBAL_YAW_SPEED 0
 
 //pitch 速度环 PID参数以及 PID最大输出，积分输出
-#define PITCH_SPEED_PID_KP        8500.f       //2900.0f   8000   8500
-#define PITCH_SPEED_PID_KI        0        //60.0f     60       300
-#define PITCH_SPEED_PID_KD        0         //0.0f      0.6    10
+#define PITCH_SPEED_PID_KP        5000                     // 5000  
+#define PITCH_SPEED_PID_KI        0       //60.0f     60       300
+#define PITCH_SPEED_PID_KD        0          
 #define PITCH_SPEED_PID_MAX_OUT   30000.0f      //30000.0f
 #define PITCH_SPEED_PID_MAX_IOUT  10000.0f      //10000.0f
 
@@ -24,7 +24,7 @@
 #define YAW_SPEED_PID_MAX_IOUT  5000.0f        //5000.0f
 
 //pitch 角度环 角度由陀螺仪解算 PID参数以及 PID最大输出，积分输出
-#define PITCH_GYRO_ABSOLUTE_PID_KP 20        //15.0f
+#define PITCH_GYRO_ABSOLUTE_PID_KP 15     //12
 #define PITCH_GYRO_ABSOLUTE_PID_KI 0.0f         //0.0f
 #define PITCH_GYRO_ABSOLUTE_PID_KD 0.0f         //0.0f
 #define PITCH_GYRO_ABSOLUTE_PID_MAX_OUT 10.0f   //10.0f

@@ -147,6 +147,8 @@ static void gimbal_feedback_update(gimbal_control_t *feedback_update)
 #endif
     feedback_update->gimbal_yaw_motor.motor_gyro = arm_cos_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_Z_ADDRESS_OFFSET))
         - arm_sin_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_X_ADDRESS_OFFSET));
+				
+				
 }
 
 static void gimbal_set_mode(gimbal_control_t *gimbal_mode_set)
@@ -229,7 +231,7 @@ static void gimbal_set_control(gimbal_control_t *gimbal_control_set)
     if (gimbal_control_set->gimbal_pitch_motor.gimbal_motor_mode == GIMBAL_MOTOR_RAW)
     {
         //raw模式下，直接发送控制值
-        gimbal_control_set->gimbal_pitch_motor.raw_cmd_current = add_pitch_angle*1000000;
+        gimbal_control_set->gimbal_pitch_motor.raw_cmd_current = add_pitch_angle*1500000;
     }
     else if (gimbal_control_set->gimbal_pitch_motor.gimbal_motor_mode == GIMBAL_MOTOR_GYRO)
     {
