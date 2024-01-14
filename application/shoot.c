@@ -435,8 +435,6 @@ static void shoot_set_contorl(shoot_control_t *shoot_ctrl)
         shoot_ctrl->trigger_motor.trigger_speed_set = -CONTINUE_TRIGGER_SPEED;
 #else
         shoot_ctrl->trigger_motor.trigger_speed_set = CONTINUE_TRIGGER_SPEED;
-#endif
-        trigger_motor_turn_back(shoot_ctrl);
     }
     else if (shoot_ctrl->shoot_mode == SHOOT_DONE)
     {
