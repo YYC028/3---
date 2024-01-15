@@ -23,7 +23,7 @@
 //鼠标长按判断
 #define PRESS_LONG_TIME             400
 //遥控器射击开关打下档一段时间后 连续发射子弹 用于清单
-#define RC_S_LONG_TIME              100    //2000
+#define RC_S_LONG_TIME              1500    //2000
 //摩擦轮高速 加速 时间
 #define UP_ADD_TIME                 80
 //电机反馈码盘值范围

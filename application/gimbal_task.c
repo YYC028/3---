@@ -96,7 +96,7 @@ static void gimbal_init(gimbal_control_t *init)
 	init->gimbal_yaw_motor.offset_ecd = 5740;
 	init->gimbal_pitch_motor.offset_ecd = 7623;
     //初始化pitch最大最小机械角度，防止电机期望角度超过死角产生抖动或过热
-	init->gimbal_pitch_motor.max_relative_angle = 0.11; 
+	init->gimbal_pitch_motor.max_relative_angle = 0.80; 
 	init->gimbal_pitch_motor.min_relative_angle = -0.50; 
 			
 			

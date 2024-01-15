@@ -170,7 +170,7 @@ static void chassis_set_mode(chassis_move_t *chassis_move_mode)
      if (switch_is_mid(chassis_move_mode->chassis_RC->rc.s[CHASSIS_MODE_CHANNEL]))
     {
 
-         chassis_move_mode->chassis_mode = CHASSIS_VECTOR_FOLLOW_CHASSIS_YAW;         //此模式方便底盘掉电重新上电自动回中
+         chassis_move_mode->chassis_mode = CHASSIS_VECTOR_FOLLOW_GIMBAL_YAW;         //底盘跟随云台																																																																																						
     }
 
     else if (switch_is_down(chassis_move_mode->chassis_RC->rc.s[CHASSIS_MODE_CHANNEL]))
@@ -179,7 +179,7 @@ static void chassis_set_mode(chassis_move_t *chassis_move_mode)
     }
      else if (switch_is_up(chassis_move_mode->chassis_RC->rc.s[CHASSIS_MODE_CHANNEL]))
     {
-          chassis_move_mode->chassis_mode = CHASSIS_VECTOR_FOLLOW_GIMBAL_YAW;        //还是底盘跟随云台模式，也可以小陀螺
+          chassis_move_mode->chassis_mode = CHASSIS_SMALL_GYROSCOPE;        //小陀螺
     }
 }
 
@@ -227,17 +227,33 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
         chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);
     }
-    else if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_FOLLOW_CHASSIS_YAW)
-    {
-        fp32 delat_angle = 0.0f;
-        //设置底盘控制的角度
-        chassis_move_control->chassis_yaw_set = rad_format(angle_set);
-        delat_angle = rad_format(chassis_move_control->chassis_yaw_set - chassis_move_control->chassis_yaw);
-        //计算旋转的角速度
-        chassis_move_control->wz_set = -PID_calc(&chassis_move_control->chassis_angle_pid, delat_angle, 0);
+    else if (chassis_move_control->chassis_mode == CHASSIS_SMALL_GYROSCOPE)
+		{  	
+			fp32 sin_yaw = 0.0f, cos_yaw = 0.0f;
+        //旋转控制底盘速度方向，保证前进方向是云台方向，有利于运动平稳
+        sin_yaw = arm_sin_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
+        cos_yaw = arm_cos_f32(-chassis_move_control->chassis_yaw_motor->relative_angle);
+        chassis_move_control->vx_set =  cos_yaw * vx_set + sin_yaw * vy_set;
+        chassis_move_control->vy_set = -sin_yaw * vx_set + cos_yaw * vy_set;
+        //设置控制相对云台角度
+        chassis_move_control->chassis_relative_angle_set = rad_format(angle_set);
+        //计算旋转PID角速度
+
+        if (chassis_move_control->chassis_RC->key.v & SWING_KEY)
+        {
+            chassis_move_control->is_whipping = 1;
+            chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;    //键鼠控制时按住ctrl变为小陀螺
+        }
+        else
+        {
+            chassis_move_control->is_whipping = 0;
+            chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;   //小陀螺
+        }
         //速度限幅
-        chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
-        chassis_move_control->vy_set = fp32_constrain(vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);
+        chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
+        chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);
+			
+			
     }
     else if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_NO_FOLLOW_YAW) 
     {

@@ -108,7 +108,7 @@
 typedef enum
 {
   CHASSIS_VECTOR_FOLLOW_GIMBAL_YAW,   //底盘会跟随云台相对角度
-  CHASSIS_VECTOR_FOLLOW_CHASSIS_YAW,  //底盘有底盘角度控制闭环
+  CHASSIS_SMALL_GYROSCOPE,  //底盘有底盘角度控制闭环
   CHASSIS_VECTOR_NO_FOLLOW_YAW,       //底盘有旋转速度控制
   CHASSIS_VECTOR_RAW,                 //control-current will be sent to CAN bus derectly.
 
