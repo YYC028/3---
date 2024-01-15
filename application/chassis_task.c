@@ -101,14 +101,11 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     PID_init(&chassis_move_init->chassis_angle_pid, PID_POSITION, chassis_yaw_pid, CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT, CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT);
     
 		
-		    //用一阶滤波代替斜波函数生成
+	//用一阶滤波代替斜波函数生成
     first_order_filter_init(&chassis_move_init->chassis_cmd_slow_set_vx, CHASSIS_CONTROL_TIME, chassis_x_order_filter);
     first_order_filter_init(&chassis_move_init->chassis_cmd_slow_set_vy, CHASSIS_CONTROL_TIME, chassis_y_order_filter);
     first_order_filter_init(&chassis_move_init->chassis_cmd_slow_set_wz, CHASSIS_CONTROL_TIME, chassis_z_order_filter);
 
-		
-		
-		
 	//最大 最小速度
     chassis_move_init->vx_max_normal_speed = NORMAL_MAX_CHASSIS_SPEED_X;
     chassis_move_init->vx_min_normal_speed = -NORMAL_MAX_CHASSIS_SPEED_X;
@@ -118,9 +115,7 @@ static void chassis_init(chassis_move_t *chassis_move_init)
     chassis_move_init->vx_min_dash_speed = -DASH_MAX_CHASSIS_SPEED_X;
     chassis_move_init->vy_max_dash_speed = DASH_MAX_CHASSIS_SPEED_Y;
     chassis_move_init->vy_min_dash_speed = -DASH_MAX_CHASSIS_SPEED_Y;
-		
-		
-		
+				
     //更新一下数据
     chassis_feedback_update(chassis_move_init);
 }
@@ -134,11 +129,6 @@ static void chassis_init(chassis_move_t *chassis_move_init)
   */
 static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 {
-    if (chassis_move_update == NULL)
-    {
-        return;
-    }
-
     uint8_t i = 0;
     for (i = 0; i < 4; i++)
     {
@@ -162,11 +152,6 @@ static void chassis_feedback_update(chassis_move_t *chassis_move_update)
 
 static void chassis_set_mode(chassis_move_t *chassis_move_mode)
 {
-    if (chassis_move_mode == NULL)
-    {
-        return;
-    }
-
      if (switch_is_mid(chassis_move_mode->chassis_RC->rc.s[CHASSIS_MODE_CHANNEL]))
     {
 
@@ -180,7 +165,7 @@ static void chassis_set_mode(chassis_move_t *chassis_move_mode)
      else if (switch_is_up(chassis_move_mode->chassis_RC->rc.s[CHASSIS_MODE_CHANNEL]))
     {
           chassis_move_mode->chassis_mode = CHASSIS_SMALL_GYROSCOPE;        //小陀螺
-    }
+    } 
 }
 
 
@@ -219,8 +204,7 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         else
         {
             chassis_move_control->is_whipping = 0;
-          // chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;   //为了方便展示小陀螺，现在是遥感拨到上方直接开转，正常要用下面的这行（底盘跟随云台
-					chassis_move_control->wz_set = -PID_calc_swing_wz(&chassis_move_control->chassis_angle_pid, chassis_move_control->chassis_yaw_motor->relative_angle, chassis_move_control->chassis_relative_angle_set);//底盘跟随云台,
+            chassis_move_control->wz_set = -PID_calc_swing_wz(&chassis_move_control->chassis_angle_pid, chassis_move_control->chassis_yaw_motor->relative_angle, chassis_move_control->chassis_relative_angle_set);//底盘跟随云台,
         }
 
         //速度限幅
@@ -238,22 +222,11 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         //设置控制相对云台角度
         chassis_move_control->chassis_relative_angle_set = rad_format(angle_set);
         //计算旋转PID角速度
-
-        if (chassis_move_control->chassis_RC->key.v & SWING_KEY)
-        {
-            chassis_move_control->is_whipping = 1;
-            chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;    //键鼠控制时按住ctrl变为小陀螺
-        }
-        else
-        {
-            chassis_move_control->is_whipping = 0;
-            chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;   //小陀螺
-        }
+        chassis_move_control->is_whipping = 1;
+        chassis_move_control->wz_set = CHASSIS_GYROSCOPE_SPEED;    //键鼠控制时按住ctrl变为小陀螺
         //速度限幅
         chassis_move_control->vx_set = fp32_constrain(chassis_move_control->vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
-        chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);
-			
-			
+        chassis_move_control->vy_set = fp32_constrain(chassis_move_control->vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);	
     }
     else if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_NO_FOLLOW_YAW) 
     {
@@ -261,15 +234,6 @@ static void chassis_set_contorl(chassis_move_t *chassis_move_control)
         chassis_move_control->wz_set = angle_set; //加了个负号
         chassis_move_control->vx_set = fp32_constrain(vx_set, chassis_move_control->vx_min_dash_speed, chassis_move_control->vx_max_dash_speed);
         chassis_move_control->vy_set = fp32_constrain(vy_set, chassis_move_control->vy_min_dash_speed, chassis_move_control->vy_max_dash_speed);
-    }
-    else if (chassis_move_control->chassis_mode == CHASSIS_VECTOR_RAW)
-    {
-        //在原始模式，设置值是发送到CAN总线
-        chassis_move_control->vx_set = vx_set;
-        chassis_move_control->vy_set = vy_set;
-        chassis_move_control->wz_set = angle_set;
-        chassis_move_control->chassis_cmd_slow_set_vx.out = 0.0f;
-        chassis_move_control->chassis_cmd_slow_set_vy.out = 0.0f;
     }
 }
 

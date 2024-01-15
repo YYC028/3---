@@ -23,21 +23,22 @@
             (output) = 0;                                \
         }                                                \
     }
+    
 //云台控制所有相关数据
 gimbal_control_t gimbal_control;
 static int16_t yaw_can_set_current = 0, pitch_can_set_current = 0;
+
+
+
 /**
   * @brief          云台任务，间隔 GIMBAL_CONTROL_TIME 1ms
   * @param[in]      pvParameters: 空
   * @retval         none
   */
-
-
-
 void gimbal_task(void const *pvParameters)
 {
      vTaskDelay(GIMBAL_TASK_INIT_TIME);
-         //云台初始化,等待陀螺仪收敛
+      //云台初始化,等待陀螺仪收敛
     gimbal_init(&gimbal_control);
     while(1)
     {
@@ -46,19 +47,11 @@ void gimbal_task(void const *pvParameters)
         gimbal_set_control(&gimbal_control);     
         gimbal_control_loop(&gimbal_control);  
 
-        #if YAW_TURN
-                yaw_can_set_current = -gimbal_control.gimbal_yaw_motor.given_current;
-        #else
-                yaw_can_set_current = gimbal_control.gimbal_yaw_motor.given_current;
-        #endif
+        yaw_can_set_current = gimbal_control.gimbal_yaw_motor.given_current;
+        pitch_can_set_current = -gimbal_control.gimbal_pitch_motor.given_current;
 
-        #if PITCH_TURN
-                pitch_can_set_current = -gimbal_control.gimbal_pitch_motor.given_current;
-        #else
-                pitch_can_set_current = gimbal_control.gimbal_pitch_motor.given_current;
-        #endif
-         CAN_cmd_gimbal(yaw_can_set_current, pitch_can_set_current);   //拨弹轮电机的电流在另一任务中算得     
-				 vTaskDelay(1);
+        CAN_cmd_gimbal(yaw_can_set_current, pitch_can_set_current);   //拨弹轮电机的电流在另一任务中算得     
+		    vTaskDelay(1);
     }
 
 }
@@ -121,14 +114,10 @@ static void gimbal_feedback_update(gimbal_control_t *feedback_update)
     //云台数据更新
     feedback_update->gimbal_pitch_motor.absolute_angle = *(feedback_update->gimbal_INT_angle_point + INS_PITCH_ADDRESS_OFFSET);
 
-#if PITCH_TURN
+
     feedback_update->gimbal_pitch_motor.relative_angle = -motor_ecd_to_angle_change(feedback_update->gimbal_pitch_motor.gimbal_motor_measure->ecd,
         feedback_update->gimbal_pitch_motor.offset_ecd);
-#else
 
-    feedback_update->gimbal_pitch_motor.relative_angle = motor_ecd_to_angle_change(feedback_update->gimbal_pitch_motor.gimbal_motor_measure->ecd,
-        feedback_update->gimbal_pitch_motor.offset_ecd);
-#endif
 
     feedback_update->gimbal_pitch_motor.motor_gyro = *(feedback_update->gimbal_INT_gyro_point + INS_GYRO_Y_ADDRESS_OFFSET);
 
@@ -137,14 +126,11 @@ static void gimbal_feedback_update(gimbal_control_t *feedback_update)
 
     feedback_update->gimbal_yaw_motor.absolute_angle = *(feedback_update->gimbal_INT_angle_point + INS_YAW_ADDRESS_OFFSET);
 
-#if YAW_TURN
-    feedback_update->gimbal_yaw_motor.relative_angle = -motor_ecd_to_angle_change(feedback_update->gimbal_yaw_motor.gimbal_motor_measure->ecd,
-        feedback_update->gimbal_yaw_motor.offset_ecd);
 
-#else
+
     feedback_update->gimbal_yaw_motor.relative_angle = motor_ecd_to_angle_change(feedback_update->gimbal_yaw_motor.gimbal_motor_measure->ecd,
         feedback_update->gimbal_yaw_motor.offset_ecd);
-#endif
+
     feedback_update->gimbal_yaw_motor.motor_gyro = arm_cos_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_Z_ADDRESS_OFFSET))
         - arm_sin_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_X_ADDRESS_OFFSET));
 				

@@ -156,13 +156,9 @@ typedef struct
 
 typedef struct
 {
-    //fp32 max_yaw;
-    //fp32 min_yaw;
     fp32 zero_yaw;
     fp32 max_pitch;
     fp32 min_pitch;             //全向云台，仅记录零点   
-    //uint16_t max_yaw_ecd;
-    //uint16_t min_yaw_ecd;
     uint16_t zero_yaw_ecd;      //全向云台，仅记录零点  
     uint16_t max_pitch_ecd;
     uint16_t min_pitch_ecd;
