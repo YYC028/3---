@@ -189,17 +189,19 @@ static void shoot_feedback_update(shoot_control_t *shoot_control_update)
     {
         shoot_control_update->trigger_motor.ecd_count++;
     }
-    if (shoot_control_update->trigger_motor.ecd_count == FULL_COUNT)
+  /*  if (shoot_control_update->trigger_motor.ecd_count == FULL_COUNT)
     {
         shoot_control_update->trigger_motor.ecd_count = -(FULL_COUNT - 1);
     }
     else if (shoot_control_update->trigger_motor.ecd_count == -FULL_COUNT)
     {
         shoot_control_update->trigger_motor.ecd_count = FULL_COUNT - 1;
-    }
+    }*/
 
+ 
     //计算输出轴角度
-    shoot_control_update->trigger_motor.angle = (shoot_control_update->trigger_motor.ecd_count * ECD_RANGE + shoot_control_update->trigger_motor.motor_measure->ecd) * MOTOR_ECD_TO_ANGLE;
+    shoot_control_update->trigger_motor.angle = rad_format((shoot_control_update->trigger_motor.ecd_count * ECD_RANGE + shoot_control_update->trigger_motor.motor_measure->ecd) * MOTOR_ECD_TO_ANGLE);
+
 
     //鼠标按键
     shoot_control_update->last_press_l = shoot_control_update->press_l;

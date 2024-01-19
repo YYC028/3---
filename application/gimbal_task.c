@@ -89,7 +89,7 @@ static void gimbal_init(gimbal_control_t *init)
 	init->gimbal_yaw_motor.offset_ecd = 5740;
 	init->gimbal_pitch_motor.offset_ecd = 7623;
     //初始化pitch最大最小机械角度，防止电机期望角度超过死角产生抖动或过热
-	init->gimbal_pitch_motor.max_relative_angle = 0.80; 
+	init->gimbal_pitch_motor.max_relative_angle = 0.09; 
 	init->gimbal_pitch_motor.min_relative_angle = -0.50; 
 			
 			
@@ -132,7 +132,7 @@ static void gimbal_feedback_update(gimbal_control_t *feedback_update)
         feedback_update->gimbal_yaw_motor.offset_ecd);
 
     feedback_update->gimbal_yaw_motor.motor_gyro = arm_cos_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_Z_ADDRESS_OFFSET))
-        - arm_sin_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_X_ADDRESS_OFFSET));
+        - arm_sin_f32(feedback_update->gimbal_pitch_motor.relative_angle) * (*(feedback_update->gimbal_INT_gyro_point + INS_GYRO_X_ADDRESS_OFFSET));  //直接用yaw的角速度就行，这个没必要
 				
 				
 }
@@ -143,8 +143,8 @@ static void gimbal_set_mode(gimbal_control_t *gimbal_mode_set)
      //开关控制 云台状态   
     if (switch_is_down(gimbal_mode_set->gimbal_rc_ctrl->rc.s[GIMBAL_MODE_CHANNEL]))
     {
-         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW;  //不走pid
-			   gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_RAW; 
+         gimbal_mode_set->gimbal_yaw_motor.gimbal_motor_mode = GIMBAL_MOTOR_GYRO;  //不走pid
+			   gimbal_mode_set->gimbal_pitch_motor.gimbal_motor_mode = GIMBAL_MOTOR_GYRO; 
     }
 
     //其实拨杆在上面或中间都是陀螺仪控制而不是用编码值，所以其实可以合并

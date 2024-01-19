@@ -24,9 +24,9 @@
 //选择底盘状态 开关通道号
 #define CHASSIS_MODE_CHANNEL 0
 //遥控器前进摇杆（max 660）转化成车体前进速度（m/s）的比例
-#define CHASSIS_VX_RC_SEN 0.003f    //0.006f
+#define CHASSIS_VX_RC_SEN 0.0045f    //0.006f
 //遥控器左右摇杆（max 660）转化成车体左右速度（m/s）的比例
-#define CHASSIS_VY_RC_SEN 0.0025f    //0.005f
+#define CHASSIS_VY_RC_SEN 0.00375f    //0.005f
 //遥控器旋转摇杆（max 660）转化成车体旋转速度（rad/s）的比例
 #define CHASSIS_WZ_RC_SEN 0.006f    //0.006f
 //底盘跟随云台模式下，食指拨轮控制底盘扭腰的动作幅度，凭感觉调吧
@@ -93,10 +93,10 @@
 
 //底盘电机速度环PID
 #define M3505_MOTOR_SPEED_PID_KP 8500
-#define M3505_MOTOR_SPEED_PID_KI 24
+#define M3505_MOTOR_SPEED_PID_KI 30	
 #define M3505_MOTOR_SPEED_PID_KD 0.5f
 #define M3505_MOTOR_SPEED_PID_MAX_OUT  MAX_MOTOR_CAN_CURRENT
-#define M3505_MOTOR_SPEED_PID_MAX_IOUT 2000.0f
+#define M3505_MOTOR_SPEED_PID_MAX_IOUT 2000
 
 //底盘旋转跟随PID
 #define CHASSIS_FOLLOW_GIMBAL_PID_KP 16.0f      //40.0f  before 16.0f

@@ -27,48 +27,26 @@ Project File Date:  12/20/2023
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'standard_tpye_c'
-compiling chassis_task.c...
-..\application\remote_control.h(70): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\application\gimbal_task.h(238): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\application\chassis_task.h(212): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\application\chassis_task.c(28): warning:  #223-D: function "vTaskDelay" declared implicitly
-      vTaskDelay(CHASSIS_TASK_INIT_TIME);
-..\application\chassis_task.c(395): warning:  #1-D: last line of file ends without a newline
-  }
-..\application\chassis_task.c: 5 warnings, 0 errors
-compiling freertos.c...
+compiling INS_task.c...
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h(68): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
   #define __FPU_PRESENT             1U       /*!< FPU present                                   */
-../application/remote_control.h(70): warning:  #1-D: last line of file ends without a newline
-  #endif
-../application/gimbal_task.h(238): warning:  #1-D: last line of file ends without a newline
-  #endif
-../application/chassis_task.h(212): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Src/freertos.c: 4 warnings, 0 errors
+..\application\INS_task\INS_task.c(567): warning:  #1-D: last line of file ends without a newline
+  }
+..\application\INS_task\INS_task.c(111): warning:  #177-D: variable "timing_time"  was declared but never referenced
+  static const float timing_time = 0.001f;   //tast run time , unit s.???????????��?? ???? s
+..\application\INS_task\INS_task.c: 3 warnings, 0 errors
 compiling shoot.c...
 ..\application\remote_control.h(70): warning:  #1-D: last line of file ends without a newline
   #endif
-..\application\gimbal_task.h(238): warning:  #1-D: last line of file ends without a newline
+..\application\gimbal_task.h(234): warning:  #1-D: last line of file ends without a newline
   #endif
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h(68): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
   #define __FPU_PRESENT             1U       /*!< FPU present                                   */
 ..\application\shoot.c: 3 warnings, 0 errors
-compiling gimbal_task.c...
-..\application\remote_control.h(70): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\application\gimbal_task.h(238): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h(68): warning:  #47-D: incompatible redefinition of macro "__FPU_PRESENT" 
-  #define __FPU_PRESENT             1U       /*!< FPU present                                   */
-..\application\gimbal_task.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=54288 RO-data=3672 RW-data=492 ZI-data=49812  
+Program Size: Code=52280 RO-data=3684 RW-data=492 ZI-data=49796  
 FromELF: creating hex file...
-"standard_tpye_c\standard_tpye_c.axf" - 0 Error(s), 15 Warning(s).
+"standard_tpye_c\standard_tpye_c.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -91,7 +69,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:04
+Build Time Elapsed:  00:00:06
 </pre>
 </body>
 </html>
