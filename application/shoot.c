@@ -241,7 +241,7 @@ static void shoot_feedback_update(shoot_control_t *shoot_control_update)
     //从裁判系统中设置射速上限
    // shoot_control_update->shoot_limit = (fp32)(robot_state.shooter_id1_17mm_speed_limit);
 		shoot_control_update->shoot_limit = 30;
-    shoot_control_update->shoot_speed_set = shoot_control.shoot_limit;
+    //shoot_control_update->shoot_speed_set = shoot_control.shoot_limit;
     if (shoot_control_update->shoot_mode == SHOOT_STOP)
     {
         shoot_control_update->shoot_speed_set = 0.0f;
@@ -346,7 +346,7 @@ static void shoot_set_mode(shoot_control_t *shoot_ctrl)
 static void shoot_set_contorl(shoot_control_t *shoot_ctrl)
 {
 	
-	 //以下为
+	    //以下为拨盘速度赋值
     if (shoot_ctrl->shoot_mode == SHOOT_STOP)
     {
         shoot_ctrl->trigger_motor.speed_set = 0.0f;
@@ -408,7 +408,7 @@ static void shoot_set_contorl(shoot_control_t *shoot_ctrl)
 		
 		
 		
-		//以下赋值摩擦轮拨弹轮电流
+		//以下赋值摩擦轮以及拨弹轮电流
     if (shoot_ctrl->shoot_mode == SHOOT_STOP)
     {
         PID_clear(&shoot_ctrl->trigger_motor.pid);
