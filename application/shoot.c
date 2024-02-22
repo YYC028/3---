@@ -189,17 +189,7 @@ static void shoot_feedback_update(shoot_control_t *shoot_control_update)
     {
         shoot_control_update->trigger_motor.ecd_count++;
     }
-  /*  if (shoot_control_update->trigger_motor.ecd_count == FULL_COUNT)
-    {
-        shoot_control_update->trigger_motor.ecd_count = -(FULL_COUNT - 1);
-    }
-    else if (shoot_control_update->trigger_motor.ecd_count == -FULL_COUNT)
-    {
-        shoot_control_update->trigger_motor.ecd_count = FULL_COUNT - 1;
-    }*/
 
- 
-    //计算输出轴角度
     shoot_control_update->trigger_motor.angle = rad_format((shoot_control_update->trigger_motor.ecd_count * ECD_RANGE + shoot_control_update->trigger_motor.motor_measure->ecd) * MOTOR_ECD_TO_ANGLE);
 
 
@@ -251,7 +241,7 @@ static void shoot_feedback_update(shoot_control_t *shoot_control_update)
 
 
 /**
-  * @brief          射击状态机设置，遥控器上拨一次开启，再上拨关闭，下拨1次发射1颗，一直处在下，则持续发射，用于3min准备时间清理子弹
+* @brief          射击状态机设置，上挡摩擦轮关闭，中档摩擦轮开启，下档转动拨盘发射子弹
   * @param[in]      shoot_control_t*
   * @retval         void
   */
